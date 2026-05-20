@@ -52,6 +52,23 @@ def get_token_ids(vocab):
     
     return token_to_id, id_to_token
 
+def encode(word, merges, token_to_id):
+    new_list = list(word)
+    new_list.append('</w>')
+    
+    for best_pair in merges:
+        new_symbol_corpus = merge_pair([new_list], best_pair)
+        new_list = new_symbol_corpus[0]
+    
+    token_ids = []
+    
+    for token in new_list:
+        token_ids.append(token_to_id[token])
+    
+    return token_ids
+
+
+
 
 
 vocab_size = 50
@@ -68,6 +85,7 @@ for i in range(num_merges):
     vocab.add(best_pair[0]+best_pair[1])
     symbol_corpus = merge_pair(symbol_corpus, best_pair)
 token_to_id, id_to_token = get_token_ids(vocab)
+encoded = encode("lowest", merges, token_to_id)
 
 
     
